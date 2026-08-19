@@ -1,15 +1,3 @@
--- ==============================================================================
--- Fanaxide - Rogue Lineage Utility
--- ==============================================================================
--- Features:
---   1. Player Healthview (Humanoid health display above players & mobs)
---   2. Player Chams (Wallhack Highlight + Roblox Username Display)
---   3. Player Intent (Dedicated held weapon / spell indicator above heads)
---   4. Observe / Spectate (Toggle-based: Right-Click any name on Leaderboard)
---   5. Proximity Alert (On-screen alert banner with adjustable range slider)
---   6. Fullbright (Lighting modifier with adjustable brightness slider)
--- ==============================================================================
-
 if not game:IsLoaded() then
     game.Loaded:Wait()
 end
@@ -31,7 +19,7 @@ Workspace:GetPropertyChangedSignal("CurrentCamera"):Connect(function()
     Camera = Workspace.CurrentCamera or Camera
 end)
 
--- Safe universal GUI parent resolver
+-- holy gui resolver
 local function GetGuiParent()
     if gethui then
         local ok, h = pcall(gethui)
@@ -57,9 +45,8 @@ if GuiParent:FindFirstChild("FanaxideGui") then
     GuiParent.FanaxideGui:Destroy()
 end
 
--- ==============================================================================
--- CONFIGURATION & STATE
--- ==============================================================================
+-- holy state
+
 local Config = {
     PlayerHealthview = false,
     PlayerChams = false,
@@ -91,9 +78,8 @@ local ProximityConnection = nil
 local SpectateLoopConnection = nil
 local LabelToPlayerCache = {}
 
--- ==============================================================================
--- ROGUE LINEAGE LEADERBOARD RESOLVER (UPVALUE + REGISTRY EXTRACTOR)
--- ==============================================================================
+-- holy leaderboard resolver
+
 local function GetPlayerCharacter(player)
     if not player then return nil end
     return player.Character or (Workspace:FindFirstChild("Live") and Workspace.Live:FindFirstChild(player.Name))
@@ -149,9 +135,8 @@ local function GetLeaderboardPlayer(label)
     return nil
 end
 
--- ==============================================================================
--- 1. OBSERVE / SPECTATE ENGINE (TOGGLE-BASED)
--- ==============================================================================
+-- 1. holy observe
+
 local function ToggleSpectate(targetPlayer)
     if SpectatingPlayer == targetPlayer or targetPlayer == LocalPlayer or not targetPlayer then
         SpectatingPlayer = nil
@@ -185,9 +170,8 @@ local function ToggleSpectate(targetPlayer)
     end
 end
 
--- ==============================================================================
--- 2. LEADERBOARD RIGHT-CLICK OBSERVE HOOKS
--- ==============================================================================
+-- 2. godly observe
+
 local function AttachLeaderboardButton(label)
     if not label or not label:IsA("TextLabel") then return end
     if label:FindFirstChild("FanaxideSPB") then return end
@@ -261,7 +245,8 @@ end
 
 InitLeaderboardHook()
 
--- Global Cursor Right-Click Interceptor
+-- right click interceptor
+
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if input.UserInputType == Enum.UserInputType.MouseButton2 then
         local mousePos = UserInputService:GetMouseLocation()
@@ -288,9 +273,8 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
     end
 end)
 
--- ==============================================================================
--- 3. DEDICATED PLAYER INTENT
--- ==============================================================================
+-- holy intent
+
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "FanaxideGui"
 ScreenGui.DisplayOrder = 9999
@@ -378,9 +362,9 @@ local function SetPlayerIntent(state)
     end
 end
 
--- ==============================================================================
--- 4. PLAYER HEALTHVIEW
--- ==============================================================================
+
+-- 4. holy healthview
+
 local function ApplyHealthToCharacter(character, enable)
     if not character or character == GetPlayerCharacter(LocalPlayer) then return end
     local humanoid = character:FindFirstChildOfClass("Humanoid")
@@ -427,9 +411,8 @@ local function SetPlayerHealthview(state)
     end
 end
 
--- ==============================================================================
--- 5. PLAYER CHAMS (ESP + USERNAME DISPLAY)
--- ==============================================================================
+-- 5. holy chams
+
 local function RemoveChams(player)
     if ChamsTable[player] then
         pcall(function() ChamsTable[player]:Destroy() end)
@@ -520,9 +503,8 @@ Players.PlayerRemoving:Connect(function(p)
     if SpectatingPlayer == p then ToggleSpectate(nil) end
 end)
 
--- ==============================================================================
--- 6. PROXIMITY ALERT
--- ==============================================================================
+-- 6. holy proximity alert
+
 local AlertBanner = Instance.new("Frame")
 AlertBanner.Name = "AlertBanner"
 AlertBanner.Size = UDim2.new(0, 320, 0, 38)
@@ -596,9 +578,9 @@ local function SetProximityAlert(state)
     end
 end
 
--- ==============================================================================
--- 7. FULLBRIGHT & BRIGHTNESS CONTROL
--- ==============================================================================
+-- 7. holy fullbright
+
+
 local function ApplyFullbright()
     if not Config.Fullbright then return end
 
@@ -659,9 +641,8 @@ local function SetFullbright(state)
     end
 end
 
--- ==============================================================================
--- 8. MAIN CONTROL GUI
--- ==============================================================================
+-- 8. vibecoded slop handwritten gui
+
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
 MainFrame.Size = UDim2.new(0, 260, 0, 275)
@@ -715,7 +696,9 @@ local function CreateToggleButton(name, yPos, defaultState, callback)
     return button
 end
 
--- Toggles
+-- holy toggles
+
+
 CreateToggleButton("Player Healthview", 34, Config.PlayerHealthview, function(state)
     SetPlayerHealthview(state)
 end)
